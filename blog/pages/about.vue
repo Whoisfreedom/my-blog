@@ -15,6 +15,7 @@
 <script>
 export default {
   asyncData({ req }) {
+    console.log(req)
     return {
       name: req ? 'server' : 'client'
     }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <nuxt/>
-    <my-footer/>
+<!--     <my-footer/> -->
   </div>
 </template>
 
@@ -16,12 +16,15 @@ export default {
 </script>
 
 <style>
+body
+{
+  background-image: url(../assets/img/homepage.png);
+}
 .container
 {
   margin: 0;
   width: 100%;
-  padding: 100px 0;
-  text-align: center;
+  padding-top: 20px;
 }
 
 .button, .button:visited
