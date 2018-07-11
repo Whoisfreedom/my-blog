@@ -1,7 +1,7 @@
 <template>
   <div>
     <nuxt/>
-<!--     <my-footer/> -->
+    <div class="bg_fix"></div>
   </div>
 </template>
 
@@ -16,8 +16,14 @@ export default {
 </script>
 
 <style>
-body
+.bg_fix
 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: -1;
   background-image: url(../assets/img/homepage.png);
 }
 .container

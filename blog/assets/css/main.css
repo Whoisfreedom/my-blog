@@ -1,6 +1,6 @@
 html, body
 {
-  background-color: #fff;
+  background-color: transparent;
   color: #2e2f30;
   letter-spacing: 0.5px;
   font-family: "Source Sans Pro", Arial, sans-serif;
@@ -19,7 +19,11 @@ a, a:hover, a:focus, a:visited
 {
   color: #41B883;
 }
-
+h3
+{
+  margin: 0;
+  padding: 0;
+}
 .logo {
   width: 243px;
   height: 218px;
@@ -32,4 +36,16 @@ a, a:hover, a:focus, a:visited
 .page-enter, .page-leave-active
 {
   opacity: 0
+}
+.model_title
+{
+  line-height: 40px;
+  height: 40px;
+  padding: 0 10px;
+  color: #2e2f30;
+}
+/*margin*/
+.mt50
+{
+  margin-top: 50px;
 }

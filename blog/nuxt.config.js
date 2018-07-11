@@ -17,7 +17,6 @@ module.exports = {
   ** Global CSS
   */
   css:[
-    {src:'element-ui/lib/theme-chalk/index.css'},
     {src:'~assets/css/main.css'}
   ],
   /*
@@ -27,7 +26,6 @@ module.exports = {
   /*
    ** Build configuration
    */
-  plugins: [{src:'~plugins/element-ui', ssr: false}],
   build: {
     /*
      ** Run ESLINT on save
@@ -41,7 +39,6 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-    },
-    vendor: ['element-ui']
+    }
   }
 }
