@@ -72,7 +72,6 @@ export default {
       this.month = nowDate.getMonth()
       this.date = nowDate.getDate()
       this.weekDay = nowDate.getDay()
-      console.log(this.year, 'year', this.month, 'month', this.date, 'date', this.weekDay, 'weekDay', this.hour, 'hour', this.minutes, 'minutes', this.second, 'second')
       // 设置时针并运动
       setInterval(() => {
         let nowDate = new Date()
