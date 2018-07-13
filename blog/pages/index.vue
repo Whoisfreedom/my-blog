@@ -28,8 +28,13 @@
 </template>
 <script>
 import Calendar from '../components/Calendar.vue'
+import axios from 'axios'
 
 export default {
+  created() {
+    let data = axios.get(`http://localhost:8080/pets`)
+    console.log(data)
+  },
   components: {
     Calendar
   }

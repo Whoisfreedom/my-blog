@@ -65,7 +65,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -105,61 +105,83 @@ module.exports = {
           exclude: /(node_modules)/
         });
       }
-    }
+    },
+
+    vendor: ['axios']
   }
 };
 
 /***/ },
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-module.exports = __webpack_require__(4);
-
+var usersRequest = {
+  userInfo: function userInfo(ctx) {
+    ctx.response.body = 'Hello World';
+  }
+};
+module.exports = usersRequest;
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-module.exports = require("koa");
+module.exports = __webpack_require__(6);
+
 
 /***/ },
 /* 3 */
 /***/ function(module, exports) {
 
-module.exports = require("nuxt");
+module.exports = require("koa");
 
 /***/ },
 /* 4 */
 /***/ function(module, exports) {
 
-module.exports = require("regenerator-runtime");
+module.exports = require("koa-route");
 
 /***/ },
 /* 5 */
+/***/ function(module, exports) {
+
+module.exports = require("nuxt");
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+module.exports = require("regenerator-runtime");
+
+/***/ },
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_koa__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_koa__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_koa___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_koa__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_nuxt__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_nuxt__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_nuxt___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_nuxt__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__routers_users__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__routers_users___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__routers_users__);
 
 
 var start = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default.a.mark(function _callee2() {
     var _this = this;
 
-    var app, host, port, config, nuxt, builder;
+    var route, app, host, port, config, nuxt, builder, startRender, db, pets;
     return __WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
+            route = __webpack_require__(4);
             app = new __WEBPACK_IMPORTED_MODULE_1_koa___default.a();
             host = process.env.HOST || '127.0.0.1';
-            port = process.env.PORT || 3000;
+            port = process.env.PORT || 8080;
 
             // Import and Set Nuxt.js options
 
@@ -173,17 +195,16 @@ var start = function () {
             // Build in development
 
             if (!config.dev) {
-              _context2.next = 10;
+              _context2.next = 11;
               break;
             }
 
             builder = new __WEBPACK_IMPORTED_MODULE_2_nuxt__["Builder"](nuxt);
-            _context2.next = 10;
+            _context2.next = 11;
             return builder.build();
 
-          case 10:
-
-            app.use(function () {
+          case 11:
+            startRender = function () {
               var _ref2 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default.a.mark(function _callee(ctx, next) {
                 return __WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
                   while (1) {
@@ -211,15 +232,39 @@ var start = function () {
                 }, _callee, _this);
               }));
 
-              return function (_x, _x2) {
+              return function startRender(_x, _x2) {
                 return _ref2.apply(this, arguments);
               };
-            }());
+            }();
 
-            app.listen(port, host);
-            console.log('Server listening on ' + host + ':' + port); // eslint-disable-line no-console
+            db = {
+              tobi: { name: 'tobi', species: 'ferret' },
+              loki: { name: 'loki', species: 'ferret' },
+              jane: { name: 'jane', species: 'ferret' }
+            };
+            pets = {
+              list: function list(ctx) {
+                ctx.status = 200;
+                ctx.body = 'pet';
+                console.log(ctx);
+              },
 
-          case 13:
+              show: function show(ctx, name) {
+                console.log(ctx);
+                var pet = db[name];
+                if (!pet) return ctx.throw('cannot find that pet', 404);
+                ctx.body = pet.name + ' is a ' + pet.species;
+              }
+            };
+
+            app.use(route.get('/pets', pets.list));
+            app.use(route.get('/pets/:name', pets.show));
+            app.use(startRender);
+
+            app.listen(port);
+            console.log('Server listening on ' + ':' + port); // eslint-disable-line no-console
+
+          case 19:
           case 'end':
             return _context2.stop();
         }
@@ -233,6 +278,7 @@ var start = function () {
 }();
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 
 
 
