@@ -44,8 +44,7 @@ async function start () {
   var pets = {
     list: (ctx) => {
       ctx.status = 200
-      ctx.body = 'pet'
-      console.log(ctx)
+      ctx.body = db
     },
    
     show: (ctx, name) => {

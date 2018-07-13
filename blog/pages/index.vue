@@ -32,8 +32,9 @@ import axios from 'axios'
 
 export default {
   created() {
-    let data = axios.get(`http://localhost:8080/pets`)
-    console.log(data)
+    axios.get(`http://localhost:8080/pets`).then(response => {
+      console.log(response)
+    })
   },
   components: {
     Calendar

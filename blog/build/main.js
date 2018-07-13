@@ -245,8 +245,7 @@ var start = function () {
             pets = {
               list: function list(ctx) {
                 ctx.status = 200;
-                ctx.body = 'pet';
-                console.log(ctx);
+                ctx.body = db;
               },
 
               show: function show(ctx, name) {
