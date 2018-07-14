@@ -28,7 +28,6 @@
 </template>
 <script>
 import Calendar from '../components/Calendar.vue'
-import axios from 'axios'
 
 export default {
   created() {

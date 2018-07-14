@@ -40,6 +40,6 @@ module.exports = {
         })
       }
     },
-    vendor: ['axios']
+    vendor: ['~plugins/myHttp.js']
   }
 }
