@@ -14,6 +14,10 @@ module.exports = {
     ]
   },
   /*
+  ** Global JS
+  */
+  plugins: ['~plugins/myHttp.js'],
+  /*
   ** Global CSS
   */
   css:[
@@ -40,6 +44,5 @@ module.exports = {
         })
       }
     },
-    vendor: ['~plugins/myHttp.js']
   }
 }

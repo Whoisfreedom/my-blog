@@ -82,6 +82,10 @@ module.exports = {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   /*
+  ** Global JS
+  */
+  plugins: ['~plugins/myHttp.js'],
+  /*
   ** Global CSS
   */
   css: [{ src: '~assets/css/main.css' }],
@@ -105,9 +109,7 @@ module.exports = {
           exclude: /(node_modules)/
         });
       }
-    },
-
-    vendor: ['~plugins/myHttp.js']
+    }
   }
 };
 
@@ -115,11 +117,28 @@ module.exports = {
 /* 1 */
 /***/ function(module, exports) {
 
+// const redis = require('redis')
+// var client = redis.createClient(6379, 'localhost')
+
 var usersRequest = {
   userInfo: function userInfo(ctx) {
-    ctx.response.body = 'Hello World';
+    ctx.status = 200;
+    ctx.body = 'Hello World';
   }
+  // setUser: (ctx) => {
+  //   client.set('hello', 'that is a value')
+  //   ctx.status = 200
+  //   ctx.body = 'redis 已经创建';
+  // },
+  // getUser: (ctx) => {
+  //   client.get('hello', function(err, v){
+  //   	console.log(err, v)
+  //     ctx.status = 200
+  //     ctx.body = 'redis 已经获取';
+  //   })
+  // }
 };
+
 module.exports = usersRequest;
 
 /***/ },
@@ -173,14 +192,14 @@ var start = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default.a.mark(function _callee2() {
     var _this = this;
 
-    var route, app, host, port, config, nuxt, builder, startRender, db, pets;
+    var app, port, config, nuxt, builder, startRender;
     return __WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            route = __webpack_require__(4);
             app = new __WEBPACK_IMPORTED_MODULE_1_koa___default.a();
-            host = process.env.HOST || '127.0.0.1';
+            // const host = process.env.HOST || '127.0.0.1'
+
             port = process.env.PORT || 8080;
 
             // Import and Set Nuxt.js options
@@ -195,15 +214,15 @@ var start = function () {
             // Build in development
 
             if (!config.dev) {
-              _context2.next = 11;
+              _context2.next = 9;
               break;
             }
 
             builder = new __WEBPACK_IMPORTED_MODULE_2_nuxt__["Builder"](nuxt);
-            _context2.next = 11;
+            _context2.next = 9;
             return builder.build();
 
-          case 11:
+          case 9:
             startRender = function () {
               var _ref2 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default.a.mark(function _callee(ctx, next) {
                 return __WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
@@ -237,33 +256,15 @@ var start = function () {
               };
             }();
 
-            db = {
-              tobi: { name: 'tobi', species: 'ferret' },
-              loki: { name: 'loki', species: 'ferret' },
-              jane: { name: 'jane', species: 'ferret' }
-            };
-            pets = {
-              list: function list(ctx) {
-                ctx.status = 200;
-                ctx.body = db;
-              },
-
-              show: function show(ctx, name) {
-                console.log(ctx);
-                var pet = db[name];
-                if (!pet) return ctx.throw('cannot find that pet', 404);
-                ctx.body = pet.name + ' is a ' + pet.species;
-              }
-            };
-
-            app.use(route.get('/pets', pets.list));
-            app.use(route.get('/pets/:name', pets.show));
+            app.use(route.get('/users', __WEBPACK_IMPORTED_MODULE_3__routers_users___default.a.userInfo));
+            // app.use(route.get('/setusers', users.setUser));
+            // app.use(route.get('/getusers', users.getUser));
             app.use(startRender);
 
             app.listen(port);
             console.log('Server listening on ' + ':' + port); // eslint-disable-line no-console
 
-          case 19:
+          case 14:
           case 'end':
             return _context2.stop();
         }
@@ -281,6 +282,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 
 
+var route = __webpack_require__(4);
 
 start();
 
