@@ -65,7 +65,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -115,91 +115,70 @@ module.exports = {
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-// const redis = require('redis')
-// var client = redis.createClient(6379, 'localhost')
+module.exports = __webpack_require__(5);
 
-var usersRequest = {
-  userInfo: function userInfo(ctx) {
-    ctx.status = 200;
-    ctx.body = 'Hello World';
-  }
-  // setUser: (ctx) => {
-  //   client.set('hello', 'that is a value')
-  //   ctx.status = 200
-  //   ctx.body = 'redis 已经创建';
-  // },
-  // getUser: (ctx) => {
-  //   client.get('hello', function(err, v){
-  //   	console.log(err, v)
-  //     ctx.status = 200
-  //     ctx.body = 'redis 已经获取';
-  //   })
-  // }
-};
-
-module.exports = usersRequest;
 
 /***/ },
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(6);
-
-
-/***/ },
-/* 3 */
 /***/ function(module, exports) {
 
 module.exports = require("koa");
 
 /***/ },
-/* 4 */
+/* 3 */
 /***/ function(module, exports) {
 
-module.exports = require("koa-route");
+module.exports = require("koa2-cors");
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports) {
 
 module.exports = require("nuxt");
 
 /***/ },
-/* 6 */
+/* 5 */
 /***/ function(module, exports) {
 
 module.exports = require("regenerator-runtime");
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_koa__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_koa__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_koa___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_koa__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_nuxt__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_nuxt__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_nuxt___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_nuxt__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__routers_users__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__routers_users___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__routers_users__);
 
 
 var start = function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default.a.mark(function _callee2() {
+  var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default.a.mark(function _callee3() {
     var _this = this;
 
-    var app, port, config, nuxt, builder, startRender;
-    return __WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
+    var app, router, port, config, nuxt, builder, startRender;
+    return __WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default.a.wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
             app = new __WEBPACK_IMPORTED_MODULE_1_koa___default.a();
-            // const host = process.env.HOST || '127.0.0.1'
+            router = new Router();
+            // var client = redis.createClient(6379, 'localhost')
+            //配置跨域请求
 
+            app.use(cors({
+              origin: function origin(ctx) {
+                return '*';
+              }
+            }));
+
+            // const host = process.env.HOST || '127.0.0.1'
             port = process.env.PORT || 8080;
 
             // Import and Set Nuxt.js options
@@ -214,15 +193,15 @@ var start = function () {
             // Build in development
 
             if (!config.dev) {
-              _context2.next = 9;
+              _context3.next = 11;
               break;
             }
 
             builder = new __WEBPACK_IMPORTED_MODULE_2_nuxt__["Builder"](nuxt);
-            _context2.next = 9;
+            _context3.next = 11;
             return builder.build();
 
-          case 9:
+          case 11:
             startRender = function () {
               var _ref2 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default.a.mark(function _callee(ctx, next) {
                 return __WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
@@ -256,20 +235,39 @@ var start = function () {
               };
             }();
 
-            app.use(route.get('/users', __WEBPACK_IMPORTED_MODULE_3__routers_users___default.a.userInfo));
-            // app.use(route.get('/setusers', users.setUser));
-            // app.use(route.get('/getusers', users.getUser));
+            router.get('/getusers', function () {
+              var _ref3 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default.a.mark(function _callee2(ctx) {
+                return __WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
+                  while (1) {
+                    switch (_context2.prev = _context2.next) {
+                      case 0:
+                        ctx.status = 200;
+                        ctx.body = '111';
+
+                      case 2:
+                      case 'end':
+                        return _context2.stop();
+                    }
+                  }
+                }, _callee2, _this);
+              }));
+
+              return function (_x3) {
+                return _ref3.apply(this, arguments);
+              };
+            }());
+            app.use(router.routes()).use(router.allowedMethods());
             app.use(startRender);
 
             app.listen(port);
             console.log('Server listening on ' + ':' + port); // eslint-disable-line no-console
 
-          case 14:
+          case 17:
           case 'end':
-            return _context2.stop();
+            return _context3.stop();
         }
       }
-    }, _callee2, this);
+    }, _callee3, this);
   }));
 
   return function start() {
@@ -281,10 +279,24 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 
 
-
-var route = __webpack_require__(4);
+var cors = __webpack_require__(3);
+var redis = __webpack_require__(9);
+var Router = __webpack_require__(8);
 
 start();
+
+/***/ },
+/* 7 */,
+/* 8 */
+/***/ function(module, exports) {
+
+module.exports = require("koa-router");
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+module.exports = require("redis");
 
 /***/ }
 /******/ ]);

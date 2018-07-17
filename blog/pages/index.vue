@@ -31,12 +31,6 @@ import Calendar from '../components/Calendar.vue'
 
 export default {
   created() {
-    this.axios.get(`http://192.168.1.165:8080/users`).then(response => {
-      console.log(response)
-    })
-    this.axios.get(`http://192.168.1.165:8080/setusers`).then(response => {
-      console.log(response)
-    })
     this.axios.get(`http://192.168.1.165:8080/getusers`).then(response => {
       console.log(response)
     })

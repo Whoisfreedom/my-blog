@@ -1,21 +1,22 @@
 import Koa from 'koa'
 import { Nuxt, Builder } from 'nuxt'
 const cors = require('koa2-cors');
-const redis = require('redis')
-import users from './routers/users'
+var Redis = require('ioredis');
+const Router = require('koa-router')
 
 
 
 async function start () {
   const app = new Koa()
-  var client = redis.createClient(6379, 'localhost')
+  var router = new Router()
+  var redis = new Redis();
   //配置跨域请求
   app.use(cors({
     origin: function(ctx) {
       return '*';
     },
   }));
-  const route = require('koa-route')
+  
   // const host = process.env.HOST || '127.0.0.1'
   const port = process.env.PORT || 8080
 
@@ -45,15 +46,18 @@ async function start () {
     })
   }
 
-  app.use(route.get('/users', users.userInfo))
-  app.use(route.get('/setusers', users.setUser))
-  app.use(route.get('/getusers', async (ctx) => {
+  router.get('/getusers', async (ctx, next) => {
         ctx.status = 200
-        ctx.body = await client.get("hello", function(err, v){
-          console.log(v)
-        })
-  }))
+        redis.set('hello', 'this is hello')
+        ctx.body = await redis.get('hello', function (err, result) {
+          return result
+        });
+  })
+  app
+  .use(router.routes())
+  .use(router.allowedMethods());
   app.use(startRender)
+  
     
   app.listen(port)
   console.log('Server listening on ' + ':' + port) // eslint-disable-line no-console

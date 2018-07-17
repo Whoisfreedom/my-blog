@@ -14,11 +14,11 @@
   "dependencies": {
     "axios": "^0.18.0",
     "cross-env": "^5.0.1",
+    "ioredis": "^3.2.2",
     "koa": "^2.4.1",
-    "koa-route": "^3.2.0",
+    "koa-router": "^7.4.0",
     "koa2-cors": "^2.0.5",
     "nuxt": "latest",
-    "redis": "^2.8.0",
     "source-map-support": "^0.4.15"
   },
   "devDependencies": {
