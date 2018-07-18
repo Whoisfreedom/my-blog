@@ -12,7 +12,7 @@
     			</ol>
     		</div>
     		<div class="bottom_titles mt50 container_box">
-    			<h3 class="model_title">待确认</h3>
+    			<h3 class="model_title">最近评论</h3>
     		</div>
     	</div>
     	<div class="home_right">
@@ -31,7 +31,10 @@ import Calendar from '../components/Calendar.vue'
 
 export default {
   created() {
-    this.axios.get(`http://192.168.1.165:8080/getusers`).then(response => {
+    this.axios.get('/getusers').then(response => {
+      console.log(1)
+    })
+    this.axios.get('/test').then(response => {
       console.log(response)
     })
   },

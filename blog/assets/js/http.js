@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://localhost:8080'
-axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8'
+axios.defaults.baseURL = 'http://192.168.1.165:8080'
 
 export default axios

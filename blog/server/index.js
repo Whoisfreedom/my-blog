@@ -1,22 +1,19 @@
 import Koa from 'koa'
 import { Nuxt, Builder } from 'nuxt'
-const cors = require('koa2-cors');
-var Redis = require('ioredis');
-const Router = require('koa-router')
+const cors = require('koa2-cors')
 
-
-
+//获取user路由
+var users = require('./routers/users');
 async function start () {
   const app = new Koa()
-  var router = new Router()
-  var redis = new Redis();
   //配置跨域请求
   app.use(cors({
     origin: function(ctx) {
       return '*';
     },
   }));
-  
+
+
   // const host = process.env.HOST || '127.0.0.1'
   const port = process.env.PORT || 8080
 
@@ -46,16 +43,9 @@ async function start () {
     })
   }
 
-  router.get('/getusers', async (ctx, next) => {
-        ctx.status = 200
-        redis.set('hello', 'this is hello')
-        ctx.body = await redis.get('hello', function (err, result) {
-          return result
-        });
-  })
   app
-  .use(router.routes())
-  .use(router.allowedMethods());
+  .use(users.routes())
+  .use(users.allowedMethods());
   app.use(startRender)
   
     
