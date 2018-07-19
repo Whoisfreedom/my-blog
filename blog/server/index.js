@@ -2,8 +2,14 @@ import Koa from 'koa'
 import { Nuxt, Builder } from 'nuxt'
 const cors = require('koa2-cors')
 
+// 引入 mongoose 配置文件
+var mongoose = require('./mongo/mongoose.js');
+// 执行配置文件中的函数，以实现数据库的配置和 Model 的创建等
+var db = mongoose();
+
 //获取user路由
 var users = require('./routers/users');
+var articles = require('./routers/articles');
 async function start () {
   const app = new Koa()
   //配置跨域请求
@@ -43,9 +49,9 @@ async function start () {
     })
   }
 
-  app
-  .use(users.routes())
-  .use(users.allowedMethods());
+
+  app.use(users.routes())
+  app.use(articles.routes())
   app.use(startRender)
   
     

@@ -5,6 +5,8 @@ html, body
   letter-spacing: 0.5px;
   font-family: "Source Sans Pro", Arial, sans-serif;
   height: 100vh;
+  min-width: 1000px;
+  overflow: auto;
   margin: 0;
 }
 

@@ -8,7 +8,7 @@
     		<div class="top_titles container_box">
     			<h3 class="model_title">最近发表</h3>
     			<ol>
-    				<li>这是测试标题</li>
+    				<li v-for="item in articleList" :key="item.Aid">{{item.title}}</li>
     			</ol>
     		</div>
     		<div class="bottom_titles mt50 container_box">
@@ -30,12 +30,14 @@
 import Calendar from '../components/Calendar.vue'
 
 export default {
-  created() {
-    this.axios.get('/getusers').then(response => {
-      console.log(1)
-    })
-    this.axios.get('/test').then(response => {
-      console.log(response)
+  data() {
+    return {
+      articleList: []
+    }
+  },
+  mounted() {
+    this.axios.post('/getArticles').then(response => {
+      this.articleList = response.data
     })
   },
   components: {
