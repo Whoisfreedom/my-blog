@@ -1,6 +1,6 @@
 # dependencies
 node_modules
-sftp-config.json
+../sftp-config.json
 
 # logs
 npm-debug.log
