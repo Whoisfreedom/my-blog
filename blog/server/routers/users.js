@@ -11,6 +11,12 @@ db.once('open', function() {
 });
 var router = new Router()
 
+router.post('/userlogin', async (ctx, next) => {
+  console.log(ctx.request.body)
+  ctx.status = 200
+  ctx.body = '登录请求成功'
+})
+
 router.post('/getusers', async (ctx, next) => {
   console.log(ctx.request)
   ctx.status = 200
