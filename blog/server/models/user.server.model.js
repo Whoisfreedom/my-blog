@@ -1,10 +1,11 @@
 var mongoose = require('mongoose');
 
 var UserSchema = new mongoose.Schema({
-	uid: Number,
+	uid: String,
 	userName: String,
 	createTime: Date,
-	loastLogin:Date
+	lastLogin:Date,
+	passWord: String
 })
 
 mongoose.model('User', UserSchema);
