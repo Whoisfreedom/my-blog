@@ -13,8 +13,42 @@ var router = new Router()
 
 router.post('/userlogin', async (ctx, next) => {
   console.log(ctx.request.body)
-  ctx.status = 200
-  ctx.body = '登录请求成功'
+  let req = ctx.request.body
+  let loginuser = await User.find({"userName": req.userName}, function (err, users) {
+      return users
+  })
+  if(loginuser && loginuser.length>0){
+    let findUser = loginuser[0]
+    if(findUser.passWord === req.passWord){
+      redis.set('loginSessionId', findUser.uid)
+      let loginSessionId = await redis.get('loginSessionId', function (err, result) {
+        return result
+      });
+      console.log(loginSessionId)
+      ctx.status = 200
+      ctx.body = {
+        code: 0,
+        errorMsg: null,
+        loginSessionId: findUser.uid,
+        userName: findUser.userName
+      }
+    }else{
+      ctx.status = 200
+      ctx.body = {
+        code: -1,
+        errorMsg: '密码错误'
+      }
+    }
+    
+  }else{
+    ctx.status = 200
+    ctx.body = {
+      code: -1,
+      errorMsg: '用户不存在'
+    }
+  }
+  console.log(loginuser)
+  
 })
 
 router.post('/getusers', async (ctx, next) => {
@@ -26,22 +60,28 @@ router.post('/getusers', async (ctx, next) => {
   });
 })
 
-router.post('/test', async function(ctx, next){
-  if(ctx.request.header.connection != 'close'){
-    var bobo = new User({ name: 'bobo' });
-    bobo.save(function (err, bobo) {
-      if (err) return console.error(err);
-    });
-    let res = await User.find(function (err, users) {
-      // if (err) return console.error(err);
-      // console.log(kittens)
-      return users
-    })
-    // console.log(res)
+// router.post('/setuser', async function(ctx, next){
+//   if(ctx.request.header.connection != 'close'){
+//     var bobo = new User({ 
+//       userName: 'whoisfreedom',
+//       uid: 'lzywbb',
+//       createTime: new Date(),
+//       lastLogin:new Date(),
+//       passWord: 'fdc5e2ac5e397b12ff425d71cbcc0c45'
+//      });
+//     bobo.save(function (err, bobo) {
+//       if (err) return console.error(err);
+//     });
+//     let res = await User.find(function (err, users) {
+//       // if (err) return console.error(err);
+//       // console.log(kittens)
+//       return users
+//     })
+//     // console.log(res)
     
-    ctx.status = 200
-    ctx.body = res
-  }
-});
+//     ctx.status = 200
+//     ctx.body = res
+//   }
+// });
 
 module.exports = router;
