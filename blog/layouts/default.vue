@@ -25,6 +25,7 @@ export default {
   right: 0;
   z-index: -1;
   background-image: url(../assets/img/homepage.png);
+  background-size: cover;
 }
 .container
 {

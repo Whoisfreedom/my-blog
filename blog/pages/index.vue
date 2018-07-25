@@ -37,6 +37,7 @@ export default {
   },
   mounted() {
     this.axios.post('/getArticles').then(response => {
+      console.log(response)
       this.articleList = response.data
     })
   },
