@@ -1,14 +1,17 @@
 <template>
   <section class="container">
     <h1 class="title">
-      whoisfreedom的随笔小记
+      whoisfreedom
     </h1>
     <div class="home_container">
     	<div class="home_left">
     		<div class="top_titles container_box">
     			<h3 class="model_title">最近发表</h3>
     			<ol>
-    				<li v-for="item in articleList" :key="item.Aid">{{item.title}}</li>
+    				<li class="article_list" v-for="item in articleList" :key="item.Aid">
+              <span :title="item.title" class="title_list_left"><span>{{item.title}}</span></span>
+              <span>{{item.createTime.substr(0,10)}}</span>
+            </li>
     			</ol>
     		</div>
     		<div class="bottom_titles mt50 container_box">
@@ -87,7 +90,6 @@ export default {
  overflow: hidden;
  border-radius: .3em;
  border: 1px solid rgba(0,0,0,.1);
- cursor: pointer;
  transition: all .5s ease-out;	
 }
 .container_box:hover
@@ -95,5 +97,20 @@ export default {
  box-shadow: 0 0 0 1px hsla(0,0%,100%,.3) inset,
             0 .5em 1em rgba(0, 0, 0, 0.6);
  text-shadow: 0 1px 1px hsla(0,0%,100%,.3);
+}
+.article_list{
+  height: 40px;
+  line-height: 40px;
+}
+.title_list_left{
+  display: inline-block;
+  vertical-align: -14px;
+  width: 70%;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap; 
+}
+.title_list_left span{
+  cursor: pointer;
 }
 </style>
