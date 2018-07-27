@@ -11,7 +11,7 @@ db.once('open', function() {
 });
 
 var router = new Router()
-
+//创建文章
 router.post('/createArticle', async function(ctx, next){
 	let req = ctx.request.body
 	let loginSessionId = await redis.get('loginSessionId', function (err, result) {
@@ -50,7 +50,7 @@ router.post('/createArticle', async function(ctx, next){
 	    }
 	}	
 });
-
+// 首页获取前10文章
 router.post('/getArticles', async function(ctx, next){
   if(ctx.request.header.connection != 'close'){
     let res = await Article.find(function (err, art) {
@@ -67,7 +67,7 @@ router.post('/getArticles', async function(ctx, next){
     ctx.body = resArr
   }
 });
-
+// 分页查询
 router.post('/searchArticles', async function(ctx, next){
   let req = ctx.request.body
   let loginSessionId = await redis.get('loginSessionId', function (err, result) {
@@ -103,6 +103,75 @@ router.post('/searchArticles', async function(ctx, next){
     	list: resArr,
     	total: totalLenth
     }
+  }else{
+	  ctx.status = 200
+	  ctx.body = {
+         code: -999,
+         errorMsg: '当前未登录，请重新登录'
+      }
+  }	
+});
+
+// 查询详情
+router.post('/articleDetail', async function(ctx, next){
+  let req = ctx.request.body
+  let loginSessionId = await redis.get('loginSessionId', function (err, result) {
+	return result
+  });
+  if(req.loginSessionId && req.loginSessionId === loginSessionId){
+	//判断是否当前登录用户，如果是的话就可以操作
+	// 定义查询条件
+	let res = await Article.find({Aid:req.Aid}, function (err, art) {
+	return art
+    })
+    if(res && res.length>0){
+    	ctx.status = 200
+	    ctx.body = {
+	    	code: 0,
+	    	article: res[0]
+	    }
+    }else{
+    	ctx.status = 200
+		ctx.body = {
+	       code: -1,
+	       errorMsg: '查询失败'
+	    }
+    }
+    
+  }else{
+	  ctx.status = 200
+	  ctx.body = {
+         code: -999,
+         errorMsg: '当前未登录，请重新登录'
+      }
+  }	
+});
+
+router.post('/delArticles', async function(ctx, next){
+  let req = ctx.request.body
+  let loginSessionId = await redis.get('loginSessionId', function (err, result) {
+	return result
+  });
+  if(req.loginSessionId && req.loginSessionId === loginSessionId){
+	//判断是否当前登录用户，如果是的话就可以操作
+	// 定义查询条件
+	let res = await Article.remove({Aid:req.Aid}, function (err, art) {
+	return art
+    })
+    if(res.ok == 1){
+    	ctx.status = 200
+	    ctx.body = {
+	    	code: 0,
+	    	errorMsg: '删除成功',
+	    }
+    }else{
+    	ctx.status = 200
+	    ctx.body = {
+	    	code: -1,
+	    	errorMsg: '删除失败',
+	    }
+    }
+    
   }else{
 	  ctx.status = 200
 	  ctx.body = {
