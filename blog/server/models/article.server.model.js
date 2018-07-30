@@ -5,6 +5,7 @@ var ArticleSchema = new mongoose.Schema({
 	title: String,
 	innerHtml: String,
 	createTime: Date,
+	type: String
 })
 
 mongoose.model('Article', ArticleSchema);
