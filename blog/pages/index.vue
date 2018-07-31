@@ -9,7 +9,7 @@
     			<h3 class="model_title">最近发表</h3>
     			<ol>
     				<li class="article_list" v-for="item in articleList" :key="item.Aid">
-              <span :title="item.title" class="title_list_left"><span>{{item.title}}</span></span>
+              <span :title="item.title" @click="goDetail(item)" class="title_list_left"><span>{{item.title}}</span></span>
               <span>{{item.createTime.substr(0,10)}}</span>
             </li>
     			</ol>
@@ -24,6 +24,11 @@
     		</div>
     		<div class="top_titles mt50 container_box">
     			<h3 class="model_title">分类</h3>
+          <ul>
+            <li class="article_list" v-for="item in typeList" :key="item.codeKey">
+              <span :title="item.codeName" class="title_list_left"><span>{{item.codeName}}</span></span>
+            </li>
+          </ul>
     		</div>
     	</div>
     </div>
@@ -35,14 +40,22 @@ import Calendar from '../components/Calendar.vue'
 export default {
   data() {
     return {
-      articleList: []
+      articleList: [],
+      typeList: []
     }
   },
-  mounted() {
+  created() {
     this.axios.post('/getArticles').then(response => {
-      console.log(response)
       this.articleList = response.data
     })
+    this.axios.post('/getCodeList').then(response => {
+      this.typeList = response.data.codeList.articleTypeList
+    })
+  },
+  methods: {
+    goDetail(item) {
+      this.$router.push({'name': 'articleDetail', 'query': {id: item.Aid}})
+    }
   },
   components: {
     Calendar

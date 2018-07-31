@@ -2,6 +2,7 @@ var Router = require('koa-router')
 var Redis = require('ioredis')
 var redis = new Redis();
 var mongoose = require('mongoose');
+var codeList = require('../codeList/codeList.js')
 // 引入 mongoose 配置文件
 var User = mongoose.model('User');
 var db = mongoose.connection;
@@ -30,7 +31,8 @@ router.post('/userlogin', async (ctx, next) => {
         code: 0,
         errorMsg: null,
         loginSessionId: findUser.uid,
-        userName: findUser.userName
+        userName: findUser.userName,
+        codeList: codeList.default
       }
     }else{
       ctx.status = 200
@@ -60,28 +62,14 @@ router.post('/getusers', async (ctx, next) => {
   });
 })
 
-// router.post('/setuser', async function(ctx, next){
-//   if(ctx.request.header.connection != 'close'){
-//     var bobo = new User({ 
-//       userName: 'whoisfreedom',
-//       uid: 'lzywbb',
-//       createTime: new Date(),
-//       lastLogin:new Date(),
-//       passWord: 'fdc5e2ac5e397b12ff425d71cbcc0c45'
-//      });
-//     bobo.save(function (err, bobo) {
-//       if (err) return console.error(err);
-//     });
-//     let res = await User.find(function (err, users) {
-//       // if (err) return console.error(err);
-//       // console.log(kittens)
-//       return users
-//     })
-//     // console.log(res)
-    
-//     ctx.status = 200
-//     ctx.body = res
-//   }
-// });
+router.post('/getCodeList', async function(ctx, next){
+  if(ctx.request.header.connection != 'close'){
+    ctx.status = 200
+    ctx.body = {
+      code: 0,
+      codeList: codeList.default
+    }
+  }
+});
 
 module.exports = router;

@@ -25,6 +25,7 @@ router.post('/createArticle', async function(ctx, next){
 		  title: req.title,
 		  innerHtml: req.innerHtml,
 		  createTime: nowTime, 
+		  type: req.type
 		});
 		let saveerr = article.save(function (err, bobo) {
 		  if (err) return console.error(err);
@@ -60,7 +61,8 @@ router.post('/getArticles', async function(ctx, next){
     	return {
     	  Aid: item.Aid,
 	      createTime: item.createTime,
-	      title: item.title
+	      title: item.title,
+	      type: item.type
     	}
 	})
     ctx.status = 200
@@ -94,7 +96,8 @@ router.post('/searchArticles', async function(ctx, next){
     	return {
     	  Aid: item.Aid,
 	      createTime: item.createTime,
-	      title: item.title
+	      title: item.title,
+	      type: item.type
     	}
 	})
     ctx.status = 200

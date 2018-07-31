@@ -9,6 +9,10 @@ html, body
   overflow: auto;
   margin: 0;
 }
+ul
+{
+  list-style: none;
+}
 
 footer
 {
