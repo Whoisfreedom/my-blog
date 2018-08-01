@@ -5,5 +5,6 @@ module.exports = function(){
 
   require('../models/user.server.model.js');
   require('../models/article.server.model.js');
+  require('../models/comment.server.model.js');
   return db;
 };

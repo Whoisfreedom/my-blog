@@ -10,6 +10,7 @@ var db = mongoose();
 //获取user路由
 var users = require('./routers/users');
 var articles = require('./routers/articles');
+var comments = require('./routers/comment');
 async function start () {
   const app = new Koa()
   app.use(bodyParser());
@@ -53,6 +54,7 @@ async function start () {
 
   app.use(users.routes())
   app.use(articles.routes())
+  app.use(comments.routes())
   app.use(startRender)
   
     

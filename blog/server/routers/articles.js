@@ -117,39 +117,27 @@ router.post('/searchArticles', async function(ctx, next){
 
 // 查询详情
 router.post('/articleDetail', async function(ctx, next){
-  let req = ctx.request.body
-  let loginSessionId = await redis.get('loginSessionId', function (err, result) {
-	return result
-  });
-  if(req.loginSessionId && req.loginSessionId === loginSessionId){
-	//判断是否当前登录用户，如果是的话就可以操作
+	let req = ctx.request.body
 	// 定义查询条件
 	let res = await Article.find({Aid:req.Aid}, function (err, art) {
 	return art
-    })
-    if(res && res.length>0){
-    	ctx.status = 200
+	})
+	if(res && res.length>0){
+		ctx.status = 200
 	    ctx.body = {
 	    	code: 0,
 	    	article: res[0]
 	    }
-    }else{
-    	ctx.status = 200
+	}else{
+		ctx.status = 200
 		ctx.body = {
 	       code: -1,
 	       errorMsg: '查询失败'
 	    }
-    }
-    
-  }else{
-	  ctx.status = 200
-	  ctx.body = {
-         code: -999,
-         errorMsg: '当前未登录，请重新登录'
-      }
-  }	
+	}
 });
 
+//删除文章
 router.post('/delArticles', async function(ctx, next){
   let req = ctx.request.body
   let loginSessionId = await redis.get('loginSessionId', function (err, result) {
