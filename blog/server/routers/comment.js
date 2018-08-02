@@ -54,5 +54,37 @@ router.post('/getComments', async (ctx, next) => {
   ctx.body = resArr
 })
 
+router.post('/queryComments', async (ctx, next) => {
+  let req = ctx.request.body
+  let q = {}
+  if (req.name) {    //如果有搜索请求就增加查询条件
+    //用正则表达式得到的pattern对title属性进行模糊查询
+    //这里是搜集合里title属性包含str串的所有结果
+    var pattern = new RegExp("^.*"+req.name+".*$");
+    q.name = pattern;
+  }
+  let res = await Comment.find(q, function (err, art) {
+    return art
+  }).sort({createTime:-1}).skip((req.pageIndex - 1) * req.pageSize).limit(req.pageSize)
+  let total = await Comment.find(q, function (err, art) {
+    return art
+  })
+  let totalLenth = total.length
+  let resArr = res.map((item) => {
+    return {
+      createTime: item.createTime,
+      text: item.text,
+      bindAid: item.bindAid,
+      name: item.name
+    }
+  })
+  ctx.status = 200
+  ctx.body = {
+      code: 0,
+      list: resArr,
+      total: totalLenth
+  }
+})
+
 
 module.exports = router;

@@ -10,12 +10,18 @@
     			<ol>
     				<li class="article_list" v-for="item in articleList" :key="item.Aid">
               <span :title="item.title" @click="goDetail(item)" class="title_list_left"><span>{{item.title}}</span></span>
-              <span>{{item.createTime.substr(0,10)}}</span>
+              <span class="title_list_right">{{item.createTime.substr(0,10)}}</span>
             </li>
     			</ol>
     		</div>
     		<div class="bottom_titles mt50 container_box">
     			<h3 class="model_title">最近评论</h3>
+          <ul>
+            <li class="article_list" v-for="(item, index) in commentList" :key="index">
+              <span :title="item.text" @click="goDetail2(item)" class="title_list_left"><span>{{item.text}}</span></span>
+              <span :title="item.name" class="title_list_right">{{item.name}}</span>
+            </li>
+          </ul>
     		</div>
     	</div>
     	<div class="home_right">
@@ -41,7 +47,8 @@ export default {
   data() {
     return {
       articleList: [],
-      typeList: []
+      typeList: [],
+      commentList: []
     }
   },
   created() {
@@ -51,10 +58,20 @@ export default {
     this.axios.post('/getCodeList').then(response => {
       this.typeList = response.data.codeList.articleTypeList
     })
+    let params = {
+      pageIndex: 1,
+      pageSize: 5
+    }
+    this.axios.post('/queryComments', params).then(response => {
+      this.commentList = response.data.list
+    })
   },
   methods: {
     goDetail(item) {
       this.$router.push({'name': 'articleDetail', 'query': {id: item.Aid}})
+    },
+    goDetail2(item) {
+      this.$router.push({'name': 'articleDetail', 'query': {id: item.bindAid}})
     }
   },
   components: {
@@ -125,5 +142,13 @@ export default {
 }
 .title_list_left span{
   cursor: pointer;
+}
+.title_list_right{
+  display: inline-block;
+  width: 25%;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  float: right;
+  white-space: nowrap; 
 }
 </style>
