@@ -18,7 +18,8 @@ router.post('/setComment', async (ctx, next) => {
     bindAid: req.bindAid,
     createTime: nowTime,
     text: req.text,
-    name: req.name
+    name: req.name,
+    commentId: nowTime.getTime()
   });
   let saveerr = comment.save(function (err, bobo) {
     if (err) return console.error(err);
@@ -75,7 +76,8 @@ router.post('/queryComments', async (ctx, next) => {
       createTime: item.createTime,
       text: item.text,
       bindAid: item.bindAid,
-      name: item.name
+      name: item.name,
+      commentId: item.commentId
     }
   })
   ctx.status = 200
