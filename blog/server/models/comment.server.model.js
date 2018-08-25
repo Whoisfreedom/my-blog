@@ -4,8 +4,7 @@ var CommentSchema = new mongoose.Schema({
 	bindAid: Number,
 	createTime: Date,
 	text: String,
-	name: String,
-	commentId: Number
+	name: String
 })
 
 mongoose.model('Comment', CommentSchema);
