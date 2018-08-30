@@ -51,6 +51,44 @@ router.post('/createArticle', async function(ctx, next){
 	    }
 	}	
 });
+//修改文章
+router.post('/updateArticle', async function(ctx, next){
+	let req = ctx.request.body
+	let loginSessionId = await redis.get('loginSessionId', function (err, result) {
+        return result
+      });
+	if(req.loginSessionId && req.loginSessionId === loginSessionId){
+		//判断是否当前登录用户，如果是的话就可以操作
+		
+		let  updatedata = {$set : { title: req.title,
+									innerHtml: req.innerHtml}
+							};
+		let saveerr = Article.update({Aid:req.Aid}, updatedata, function (err) {
+			  if (err) {
+			  	console.log(err)
+			  }
+			});
+		if(saveerr){
+			ctx.status = 200
+			ctx.body = {
+		        code: -1,
+		        errorMsg: saveerr
+		    }
+		}else{
+			ctx.status = 200
+			ctx.body = {
+		        code: 0,
+		        errorMsg: '修改成功'
+		    }
+		}
+	}else{
+		ctx.status = 200
+		ctx.body = {
+	        code: -999,
+	        errorMsg: '当前未登录，请重新登录'
+	    }
+	}	
+});
 // 首页获取前10文章
 router.post('/getArticles', async function(ctx, next){
   if(ctx.request.header.connection != 'close'){
