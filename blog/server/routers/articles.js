@@ -63,12 +63,10 @@ router.post('/updateArticle', async function(ctx, next){
 		let  updatedata = {$set : { title: req.title,
 									innerHtml: req.innerHtml}
 							};
-		let saveerr = Article.update({Aid:req.Aid}, updatedata, function (err) {
-			  if (err) {
-			  	console.log(err)
-			  }
-			});
-		if(saveerr){
+		let saveerr = await Article.update({Aid:req.Aid},updatedata,function(err,person){
+      		if (err) return console.error(err);
+  		})
+		if(!saveerr.ok){
 			ctx.status = 200
 			ctx.body = {
 		        code: -1,
