@@ -107,12 +107,7 @@ router.post('/getArticles', async function(ctx, next){
 });
 // 分页查询
 router.post('/searchArticles', async function(ctx, next){
-  let req = ctx.request.body
-  let loginSessionId = await redis.get('loginSessionId', function (err, result) {
-	return result
-  });
-  if(req.loginSessionId && req.loginSessionId === loginSessionId){
-	//判断是否当前登录用户，如果是的话就可以操作
+	let req = ctx.request.body
 	// 定义查询条件
 	let q = {}
 	if (req.title) {    //如果有搜索请求就增加查询条件
@@ -121,6 +116,9 @@ router.post('/searchArticles', async function(ctx, next){
 		var pattern = new RegExp("^.*"+req.title+".*$");
 		q.title = pattern;
 	}
+	if(req.typeCode) {
+		q.type = req.typeCode;
+	} 
 	let res = await Article.find(q, function (err, art) {
 	return art
     }).sort({Aid:-1}).skip((req.pageIndex - 1) * req.pageSize).limit(req.pageSize)
@@ -142,13 +140,6 @@ router.post('/searchArticles', async function(ctx, next){
     	list: resArr,
     	total: totalLenth
     }
-  }else{
-	  ctx.status = 200
-	  ctx.body = {
-         code: -999,
-         errorMsg: '当前未登录，请重新登录'
-      }
-  }	
 });
 
 // 查询详情

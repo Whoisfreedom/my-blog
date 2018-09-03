@@ -32,7 +32,7 @@
     			<h3 class="model_title">分类</h3>
           <ul>
             <li class="article_list" v-for="item in typeList" :key="item.codeKey">
-              <span :title="item.codeName" class="title_list_left"><span>{{item.codeName}}</span></span>
+              <span :title="item.codeName" @click="goArtList(item)" class="title_list_left"><span>{{item.codeName}}</span></span>
             </li>
           </ul>
     		</div>
@@ -72,6 +72,9 @@ export default {
     },
     goDetail2(item) {
       this.$router.push({'name': 'articleDetail', 'query': {id: item.bindAid}})
+    },
+    goArtList(item) {
+      this.$router.push({'name': 'articleTypeList', 'query': {key: item.codeKey, name: item.codeName}})
     }
   },
   components: {

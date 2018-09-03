@@ -245,7 +245,7 @@ router.post('/createArticle', function () {
 //修改文章
 router.post('/updateArticle', function () {
 	var _ref2 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default.a.mark(function _callee2(ctx, next) {
-		var req, loginSessionId, saveerr;
+		var req, loginSessionId, updatedata, saveerr;
 		return __WEBPACK_IMPORTED_MODULE_0_C_my_blog_blog_node_modules_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
 			while (1) {
 				switch (_context2.prev = _context2.next) {
@@ -259,38 +259,48 @@ router.post('/updateArticle', function () {
 					case 3:
 						loginSessionId = _context2.sent;
 
-						if (req.loginSessionId && req.loginSessionId === loginSessionId) {
-							//判断是否当前登录用户，如果是的话就可以操作
-							saveerr = Article.update({ Aid: req.Aid }, {
-								title: req.title,
-								innerHtml: req.innerHtml,
-								type: req.type
-							}, function (err, art) {
-								if (err) return console.error(err);
-							});
+						if (!(req.loginSessionId && req.loginSessionId === loginSessionId)) {
+							_context2.next = 12;
+							break;
+						}
 
-							if (saveerr) {
-								ctx.status = 200;
-								ctx.body = {
-									code: -1,
-									errorMsg: saveerr
-								};
-							} else {
-								ctx.status = 200;
-								ctx.body = {
-									code: 0,
-									errorMsg: '修改成功'
-								};
-							}
+						//判断是否当前登录用户，如果是的话就可以操作
+
+						updatedata = { $set: { title: req.title,
+								innerHtml: req.innerHtml }
+						};
+						_context2.next = 8;
+						return Article.update({ Aid: req.Aid }, updatedata, function (err, person) {
+							if (err) return console.error(err);
+						});
+
+					case 8:
+						saveerr = _context2.sent;
+
+						if (!saveerr.ok) {
+							ctx.status = 200;
+							ctx.body = {
+								code: -1,
+								errorMsg: saveerr
+							};
 						} else {
 							ctx.status = 200;
 							ctx.body = {
-								code: -999,
-								errorMsg: '当前未登录，请重新登录'
+								code: 0,
+								errorMsg: '修改成功'
 							};
 						}
+						_context2.next = 14;
+						break;
 
-					case 5:
+					case 12:
+						ctx.status = 200;
+						ctx.body = {
+							code: -999,
+							errorMsg: '当前未登录，请重新登录'
+						};
+
+					case 14:
 					case 'end':
 						return _context2.stop();
 				}

@@ -32,26 +32,12 @@
         </div>
       </div>
     </div>
-    <div class="fixed_buttons">
-      <ul class="fixed_lists">
-        <li>
-          <a href="#art_title">
-            <img src="../assets/img/top.png" alt="图片丢失了" title="返回顶部">
-          </a>
-        </li>
-        <li>
-          <img src="../assets/img/home.png" @click="backHome" alt="图片丢失了" title="主页">
-        </li>
-        <li>
-          <img src="../assets/img/back.png" @click="back" alt="图片丢失了" title="返回">
-        </li>
-      </ul>
-    </div>
   </div>
 </template>
 <script>
 
 export default {
+  layout: 'fixedButtons', // 你可以为错误页面指定自定义的布局
   data() {
     return {
       articleInfo: {
