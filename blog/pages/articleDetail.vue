@@ -32,12 +32,14 @@
         </div>
       </div>
     </div>
+    <FixedButtons></FixedButtons>
   </div>
 </template>
 <script>
+import FixedButtons from '../components/FixedButtons.vue'
 
 export default {
-  layout: 'fixedButtons', // 你可以为错误页面指定自定义的布局
+  layout: 'default', // 你可以为错误页面指定自定义的布局
   data() {
     return {
       articleInfo: {
@@ -53,6 +55,9 @@ export default {
         text: ''
       }
     }
+  },
+  components: {
+    FixedButtons
   },
   mounted() {
     this.searchArticle()

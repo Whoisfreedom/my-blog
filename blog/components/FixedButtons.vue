@@ -1,7 +1,6 @@
 <template>
-  <div class="bg_fix">
-  	<nuxt/>
-    <div class="fixed_buttons">
+  <div>
+		<div class="fixed_buttons">
       <ul class="fixed_lists">
         <li>
           <a href="#art_title">
