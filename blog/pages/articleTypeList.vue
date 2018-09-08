@@ -1,12 +1,12 @@
 <template>
     <div class="article_container" id="art_title">
       <h3>{{articleType}}</h3>
-      <ol>
+      <ul>
         <li v-for="(item, index) in articleList" :key="index" class="article_list">
-          <span @click="goDetail(item)" class="list_title">{{item.title}}</span>
+          <span @click="goDetail(item)" class="list_title">{{(index+1) + '.' + item.title}}</span>
           <span class="list_date">{{item.createTime.substr(0,10)}}</span>
         </li>
-      </ol>
+      </ul>
       <FixedButtons></FixedButtons>
     </div>
 </template>
