@@ -1,9 +1,7 @@
-import Koa from 'koa'
-const cors = require('koa2-cors')
+const Koa = require('koa');
+const cors = require('koa2-cors');
 var bodyParser = require('koa-bodyparser');
-// 执行配置文件中的函数，以实现数据库的配置和 Model 的创建等
-var db = mongoose();
-
+const userFunc = require('./utils/user');
 //获取user路由
 var users = require('./routers/users');
 var articles = require('./routers/articles');
@@ -21,11 +19,10 @@ async function start() {
 
   // const host = process.env.HOST || '127.0.0.1'
   const port = process.env.PORT || 80
-
+  console.log(userFunc)
   app.use(users.routes())
-  app.use(articles.routes())
-  app.use(comments.routes())
-  app.use(startRender)
+  // app.use(articles.routes())
+  // app.use(comments.routes())
 
 
   app.listen(port)
