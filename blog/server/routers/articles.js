@@ -1,7 +1,6 @@
 // var Router = require('koa-router')
 // var Redis = require('ioredis')
 // var redis = new Redis();
-// var mongoose = require('mongoose');
 // // 引入 mongoose 配置文件
 // var Article = mongoose.model('Article');
 // var db = mongoose.connection;
