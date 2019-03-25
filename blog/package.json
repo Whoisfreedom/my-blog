@@ -1,40 +1,24 @@
 {
-  "name": "blog",
-  "version": "1.1.0",
-  "description": "Nuxt.js project",
-  "author": "BO Wang <471269081@qq.com>",
-  "private": true,
+  "name": "blog-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "dev": "backpack dev",
-    "build": "nuxt build && backpack build && npm start",
-    "start": "cross-env NODE_ENV=production node build/main.js",
-    "precommit": "npm run lint",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "koa": "^2.7.0"
   },
   "dependencies": {
-    "axios": "^0.18.0",
-    "cross-env": "^5.0.1",
-    "ioredis": "^3.2.2",
-    "koa": "^2.4.1",
+    "install": "^0.12.2",
+    "ioredis": "^4.6.2",
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
-    "koa2-cors": "^2.0.5",
-    "mongoose": "^5.2.4",
-    "nuxt": "latest",
-    "source-map-support": "^0.4.15"
-  },
-  "devDependencies": {
-    "babel-eslint": "^7.1.1",
-    "backpack-core": "^0.3.0",
-    "eslint": "^3.13.1",
-    "eslint-loader": "^1.9.0",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-plugin-html": "^2.0.3",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-node": "^4.2.2",
-    "eslint-plugin-promise": "^3.4.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "nodemon": "^1.11.0",
-    "scmp": "^2.0.0"
+    "koa2-cors": "^2.0.6",
+    "mysql": "^2.16.0",
+    "npm": "^6.9.0"
   }
 }
