@@ -5,7 +5,7 @@ const userFunc = require('./utils/user');
 //获取user路由
 var users = require('./routers/users');
 var articles = require('./routers/articles');
-var comments = require('./routers/comment');
+// var comments = require('./routers/comment');
 async function start() {
   const app = new Koa()
   app.use(bodyParser());
@@ -19,9 +19,8 @@ async function start() {
 
   // const host = process.env.HOST || '127.0.0.1'
   const port = process.env.PORT || 80
-  console.log(userFunc)
   app.use(users.routes())
-  // app.use(articles.routes())
+  app.use(articles.routes())
   // app.use(comments.routes())
 
 

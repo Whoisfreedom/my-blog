@@ -1,27 +1,27 @@
 var Router = require('koa-router')
 const userFunc = require('../utils/user');
-// 引入 mongoose 配置文件
+// 引入 mysql 配置文件
 const redis = require('../config/redis_config')
-redis.get('myKey').then(function (result) {
-  console.log(result);
-});
 var router = new Router()
 
 router.post('/user/login', async (ctx, next) => {
   // console.log(ctx.request.body)
+  console.log(ctx.request.header)
   let req = ctx.request.body
   if (req.username) {
     let findUser = []
     await userFunc.getUser(req.username).then((res) => {
+      //数据库获取相应的用户信息
       findUser = res
     }).catch((err) => {
       console.log(err)
     })
     if (findUser && findUser.length > 0) {
+      //若存在用户，则获取用户信息并校对密码
       let user = findUser[0]
-      console.log(user)
-      if (user.password && req.password == 'admin') {
-        // redis.set('loginSessionId', findUser.uid)
+      if (user.password && req.password == user.password) {
+        let sessionId = new Date().getTime() + '' + parseInt(Math.random() * 100);
+        redis.set('loginSessionId', sessionId, 'EX', 1800)
         // let loginSessionId = await redis.get('loginSessionId', function (err, result) {
         //   return result
         // });
@@ -29,7 +29,7 @@ router.post('/user/login', async (ctx, next) => {
         ctx.body = {
           code: 0,
           errorMsg: '成功',
-          loginSessionId: user.userId,
+          loginSessionId: sessionId,
           userName: user.userName,
         }
       } else {

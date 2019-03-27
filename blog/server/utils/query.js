@@ -9,14 +9,15 @@ const pool = mysql.createPool(MYSQL_CONFIG);
 
 //query sql 语句入口
 
-const query = async function () {
+const query = async function (val) {
   return new Promise((resolve, reject) => {
     pool.getConnection(function (err, connection) {
       if (err) {
         console.log(err)
         resolve(err)
       } else {
-        connection.query('SELECT * FROM user', (err, results) => {
+        console.log(val)
+        connection.query(val, (err, results) => {
           if (err) {
             reject(err)
           } else {
