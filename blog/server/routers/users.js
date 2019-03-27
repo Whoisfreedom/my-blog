@@ -1,9 +1,10 @@
 var Router = require('koa-router')
-// var Redis = require('ioredis')
-// var redis = new Redis();
 const userFunc = require('../utils/user');
 // 引入 mongoose 配置文件
-
+const redis = require('../config/redis_config')
+redis.get('myKey').then(function (result) {
+  console.log(result);
+});
 var router = new Router()
 
 router.get('/userlogin', async (ctx, next) => {

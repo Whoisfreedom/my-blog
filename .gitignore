@@ -1,3 +1,4 @@
 
 blog/sftp-config.json
 blog/server/config/mysql_Config.js
+blog/server/config/redis_config.js
