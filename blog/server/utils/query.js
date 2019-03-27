@@ -9,7 +9,7 @@ const pool = mysql.createPool(MYSQL_CONFIG);
 
 //query sql 语句入口
 
-const query = function () {
+const query = async function () {
   return new Promise((resolve, reject) => {
     pool.getConnection(function (err, connection) {
       if (err) {
