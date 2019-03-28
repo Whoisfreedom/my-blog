@@ -1,50 +1,55 @@
 var Router = require('koa-router')
-
+const typeList = require('../config/codeList')
 const redis = require('../config/redis_config')
 // 引入 mysql 配置文件
 const article = require('../utils/article');
-
+const common = require('../common/common');
 var router = new Router()
-//创建文章
-// router.post('/createArticle', async function (ctx, next) {
-//   let req = ctx.request.body
-//   let loginSessionId = await redis.get('loginSessionId', function (err, result) {
-//     return result
-//   });
-//   if (req.loginSessionId && req.loginSessionId === loginSessionId) {
-//     //判断是否当前登录用户，如果是的话就可以操作
-//     let nowTime = new Date;
-//     var article = new Article({
-//       Aid: nowTime.getTime().toString(),
-//       title: req.title,
-//       innerHtml: req.innerHtml,
-//       createTime: nowTime,
-//       type: req.type
-//     });
-//     let saveerr = article.save(function (err, bobo) {
-//       if (err) return console.error(err);
-//     });
-//     if (saveerr) {
-//       ctx.status = 200
-//       ctx.body = {
-//         code: -1,
-//         errorMsg: saveerr
-//       }
-//     } else {
-//       ctx.status = 200
-//       ctx.body = {
-//         code: 0,
-//         errorMsg: '新增成功'
-//       }
-//     }
-//   } else {
-//     ctx.status = 200
-//     ctx.body = {
-//       code: -999,
-//       errorMsg: '当前未登录，请重新登录'
-//     }
-//   }
-// });
+// 创建文章
+router.post('/article/createArticle', async function (ctx, next) {
+  let req = ctx.request.body
+  let reqHead = ctx.request.header
+  let loginSessionId = await redis.get('loginSessionId', function (err, result) {
+    return result
+  });
+  console.log(reqHead['x-token'], loginSessionId)
+  if (reqHead['x-token'] && reqHead['x-token'] === loginSessionId) {
+    //判断是否当前登录用户，如果是的话就可以操作
+    let nowTime = new Date;
+    let state = true;
+    let saveerr = null;
+    let type = typeList.find(item => item.code === req.type)
+    let createTime = common.formatDate(nowTime.getTime(), 'yyyy-MM-dd hh:mm:ss');
+    await article.addArticle(req.title, req.text, createTime, req.type, type.label).then((res, row) => {
+      //数据库获取相应的文章列表
+      if (res.affectedRows == 1) {
+        //新增成功
+        state = false;
+      }
+    }).catch((err) => {
+      saveerr = err
+    })
+    if (state) {
+      ctx.status = 200
+      ctx.body = {
+        code: -1,
+        errorMsg: saveerr
+      }
+    } else {
+      ctx.status = 200
+      ctx.body = {
+        code: 0,
+        errorMsg: '新增成功'
+      }
+    }
+  } else {
+    ctx.status = 200
+    ctx.body = {
+      code: -999,
+      errorMsg: '当前未登录，请重新登录'
+    }
+  }
+});
 // //修改文章
 // router.post('/updateArticle', async function (ctx, next) {
 //   let req = ctx.request.body
@@ -130,29 +135,42 @@ router.post('/article/searchArticles', async function (ctx, next) {
     total: totalLength
   }
 });
+//获取文章类型列表
+router.get('/article/articleType', async function (ctx, next) {
+  ctx.status = 200
+  ctx.body = {
+    code: 0,
+    data: typeList
+  }
+});
 
 // 查询详情
-// router.post('/articleDetail', async function (ctx, next) {
-//   let req = ctx.request.body
-//   // 定义查询条件
-//   let res = await Article.find({ Aid: req.Aid }, function (err, art) {
-//     return art
-//   })
-//   if (res && res.length > 0) {
-//     ctx.status = 200
-//     ctx.body = {
-//       code: 0,
-//       article: res[0]
-//     }
-//   } else {
-//     ctx.status = 200
-//     ctx.body = {
-//       code: -1,
-//       errorMsg: '查询失败'
-//     }
-//   }
+router.post('/article/articleById', async function (ctx, next) {
+  let req = ctx.request.body
+  // 定义查询条件
+  let artList = []
+  await article.getArticleById(req.id).then((res) => {
+    //数据库获取相应的文章列表
+    artList = res
+  }).catch((err) => {
 
-// });
+  })
+
+  if (artList && artList.length > 0) {
+    ctx.status = 200
+    ctx.body = {
+      code: 0,
+      article: artList[0]
+    }
+  } else {
+    ctx.status = 200
+    ctx.body = {
+      code: -1,
+      errorMsg: '查询失败'
+    }
+  }
+
+});
 
 //删除文章
 // router.post('/delArticles', async function (ctx, next) {

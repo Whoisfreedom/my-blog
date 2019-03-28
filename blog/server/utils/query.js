@@ -16,11 +16,13 @@ const query = async function (val) {
         console.log(err)
         resolve(err)
       } else {
-        console.log(val)
         connection.query(val, (err, results) => {
           if (err) {
+            console.log('数据库操作错误', err)
             reject(err)
           } else {
+            // console.log(val)
+            console.log('数据库操作成功')
             resolve(results)
           }
           connection.release()

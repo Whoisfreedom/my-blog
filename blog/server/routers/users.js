@@ -5,8 +5,6 @@ const redis = require('../config/redis_config')
 var router = new Router()
 
 router.post('/user/login', async (ctx, next) => {
-  // console.log(ctx.request.body)
-  console.log(ctx.request.header)
   let req = ctx.request.body
   if (req.username) {
     let findUser = []
