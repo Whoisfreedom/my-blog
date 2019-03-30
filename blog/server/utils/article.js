@@ -22,7 +22,24 @@ const articleFun = {
     VALUES
     ( '${title}', '${text}','${createTime}','${articleType}' ,'${typedesc}');`
     return mysql.query(_sql)
-  }
+  },
+  updateArticle: function (articleId, title, text, articleType, typedesc) {
+    //新增文章
+    let _sql = `UPDATE article
+    SET 
+    title = '${title}',
+    text = '${text}',
+    articleType = '${articleType}',
+    typedesc = '${typedesc}'
+    WHERE
+    articleId = '${articleId}';`
+    return mysql.query(_sql)
+  },
+  delArticle: function (articleId) {
+    //新增文章
+    let _sql = `DELETE FROM article WHERE articleId='${articleId}';`
+    return mysql.query(_sql)
+  },
 }
 
 

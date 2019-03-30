@@ -12,7 +12,6 @@ router.post('/article/createArticle', async function (ctx, next) {
   let loginSessionId = await redis.get('loginSessionId', function (err, result) {
     return result
   });
-  console.log(reqHead['x-token'], loginSessionId)
   if (reqHead['x-token'] && reqHead['x-token'] === loginSessionId) {
     //判断是否当前登录用户，如果是的话就可以操作
     let nowTime = new Date;
@@ -50,45 +49,48 @@ router.post('/article/createArticle', async function (ctx, next) {
     }
   }
 });
-// //修改文章
-// router.post('/updateArticle', async function (ctx, next) {
-//   let req = ctx.request.body
-//   let loginSessionId = await redis.get('loginSessionId', function (err, result) {
-//     return result
-//   });
-//   if (req.loginSessionId && req.loginSessionId === loginSessionId) {
-//     //判断是否当前登录用户，如果是的话就可以操作
-
-//     let updatedata = {
-//       $set: {
-//         title: req.title,
-//         innerHtml: req.innerHtml
-//       }
-//     };
-//     let saveerr = await Article.update({ Aid: req.Aid }, updatedata, function (err, person) {
-//       if (err) return console.error(err);
-//     })
-//     if (!saveerr.ok) {
-//       ctx.status = 200
-//       ctx.body = {
-//         code: -1,
-//         errorMsg: saveerr
-//       }
-//     } else {
-//       ctx.status = 200
-//       ctx.body = {
-//         code: 0,
-//         errorMsg: '修改成功'
-//       }
-//     }
-//   } else {
-//     ctx.status = 200
-//     ctx.body = {
-//       code: -999,
-//       errorMsg: '当前未登录，请重新登录'
-//     }
-//   }
-// });
+//修改文章
+router.post('/article/updateArticle', async function (ctx, next) {
+  let req = ctx.request.body
+  let reqHead = ctx.request.header
+  let loginSessionId = await redis.get('loginSessionId', function (err, result) {
+    return result
+  });
+  if (reqHead['x-token'] && reqHead['x-token'] === loginSessionId) {
+    //判断是否当前登录用户，如果是的话就可以操作
+    let state = true;
+    let saveerr = null;
+    let type = typeList.find(item => item.code === req.type)
+    await article.updateArticle(req.articleId, req.title, req.text, req.type, type.label).then((res, row) => {
+      //数据库获取相应的文章列表
+      if (res.affectedRows == 1) {
+        //修改成功
+        state = false;
+      }
+    }).catch((err) => {
+      saveerr = err
+    })
+    if (state) {
+      ctx.status = 200
+      ctx.body = {
+        code: -1,
+        errorMsg: saveerr
+      }
+    } else {
+      ctx.status = 200
+      ctx.body = {
+        code: 0,
+        errorMsg: '修改成功'
+      }
+    }
+  } else {
+    ctx.status = 200
+    ctx.body = {
+      code: -999,
+      errorMsg: '当前未登录，请重新登录'
+    }
+  }
+});
 // // 首页获取前10文章
 // router.post('/getArticles', async function (ctx, next) {
 //   if (ctx.request.header.connection != 'close') {
@@ -173,38 +175,46 @@ router.post('/article/articleById', async function (ctx, next) {
 });
 
 //删除文章
-// router.post('/delArticles', async function (ctx, next) {
-//   let req = ctx.request.body
-//   let loginSessionId = await redis.get('loginSessionId', function (err, result) {
-//     return result
-//   });
-//   if (req.loginSessionId && req.loginSessionId === loginSessionId) {
-//     //判断是否当前登录用户，如果是的话就可以操作
-//     // 定义查询条件
-//     let res = await Article.remove({ Aid: req.Aid }, function (err, art) {
-//       return art
-//     })
-//     if (res.ok == 1) {
-//       ctx.status = 200
-//       ctx.body = {
-//         code: 0,
-//         errorMsg: '删除成功',
-//       }
-//     } else {
-//       ctx.status = 200
-//       ctx.body = {
-//         code: -1,
-//         errorMsg: '删除失败',
-//       }
-//     }
+router.post('/article/delArticles', async function (ctx, next) {
+  let req = ctx.request.body
+  let reqHead = ctx.request.header
+  let loginSessionId = await redis.get('loginSessionId', function (err, result) {
+    return result
+  });
+  if (reqHead['x-token'] && reqHead['x-token'] === loginSessionId) {
+    //判断是否当前登录用户，如果是的话就可以操作
+    let state = true;
+    let saveerr = null;
+    await article.delArticle(req.articleId).then((res, row) => {
+      //数据库获取相应的文章列表
+      if (res.affectedRows == 1) {
+        //删除成功
+        state = false;
+      }
+    }).catch((err) => {
+      saveerr = err
+    })
+    if (state) {
+      ctx.status = 200
+      ctx.body = {
+        code: -1,
+        errorMsg: saveerr,
+      }
+    } else {
+      ctx.status = 200
+      ctx.body = {
+        code: 0,
+        errorMsg: '删除成功',
+      }
+    }
 
-//   } else {
-//     ctx.status = 200
-//     ctx.body = {
-//       code: -999,
-//       errorMsg: '当前未登录，请重新登录'
-//     }
-//   }
-// });
+  } else {
+    ctx.status = 200
+    ctx.body = {
+      code: -999,
+      errorMsg: '当前未登录，请重新登录'
+    }
+  }
+});
 
 module.exports = router;
