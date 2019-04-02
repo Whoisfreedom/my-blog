@@ -1,6 +1,18 @@
 module.exports = [
   {
-    code: 'test',
-    label: '测试',
+    code: 'javaScript',
+    label: 'javaScript',
+  },
+  {
+    code: 'htmlCss',
+    label: 'html+css',
+  },
+  {
+    code: 'life',
+    label: '生活',
+  },
+  {
+    code: 'anything',
+    label: '杂文',
   }
 ]

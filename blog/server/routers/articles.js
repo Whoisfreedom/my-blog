@@ -1,8 +1,9 @@
 var Router = require('koa-router')
-const typeList = require('../config/codeList')
 const redis = require('../config/redis_config')
 // 引入 mysql 配置文件
 const article = require('../utils/article');
+const typeFunc = require('../utils/type');
+
 const common = require('../common/common');
 var router = new Router()
 // 创建文章
@@ -117,13 +118,13 @@ router.post('/article/searchArticles', async function (ctx, next) {
   let articleList = [];
   //总文章数量
   let totalLength = 0;
-  await article.getArticles(req.title, req.pageSize, req.pageIndex).then((res) => {
+  await article.getArticles(req.title, req.type, req.pageSize, req.pageIndex).then((res) => {
     //数据库获取相应的文章列表
     articleList = res
   }).catch((err) => {
 
   })
-  await article.getArticleTotal(req.title).then((res) => {
+  await article.getArticleTotal(req.title, req.type).then((res) => {
     //数据库获取相应的文章总数
     totalLength = res[0].count
   }).catch((err) => {
@@ -139,10 +140,27 @@ router.post('/article/searchArticles', async function (ctx, next) {
 });
 //获取文章类型列表
 router.get('/article/articleType', async function (ctx, next) {
-  ctx.status = 200
-  ctx.body = {
-    code: 0,
-    data: typeList
+  //文章列表
+  let typeList = [];
+  //总文章数量
+  await typeFunc.getTypeList().then((res) => {
+    //数据库获取相应的文章列表
+    typeList = res
+  }).catch((err) => {
+
+  })
+  if (typeList && typeList.length > 0) {
+    ctx.status = 200
+    ctx.body = {
+      code: 0,
+      data: typeList
+    }
+  } else {
+    ctx.status = 200
+    ctx.body = {
+      code: -1,
+      errorMsg: '获取字典失败'
+    }
   }
 });
 
