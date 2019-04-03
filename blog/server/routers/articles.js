@@ -18,6 +18,14 @@ router.post('/article/createArticle', async function (ctx, next) {
     let nowTime = new Date;
     let state = true;
     let saveerr = null;
+    let typeList = [];
+    //总文章数量
+    await typeFunc.getTypeList().then((res) => {
+      //数据库获取相应的文章列表
+      typeList = res
+    }).catch((err) => {
+
+    })
     let type = typeList.find(item => item.code === req.type)
     let createTime = common.formatDate(nowTime.getTime(), 'yyyy-MM-dd hh:mm:ss');
     await article.addArticle(req.title, req.text, createTime, req.type, type.label).then((res, row) => {
