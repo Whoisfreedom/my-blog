@@ -18,7 +18,7 @@ async function start() {
 
 
   // const host = process.env.HOST || '127.0.0.1'
-  const port = process.env.PORT || 80
+  const port = process.env.PORT || 8001
   app.use(users.routes())
   app.use(articles.routes())
   // app.use(comments.routes())
